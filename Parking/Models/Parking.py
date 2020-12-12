@@ -26,3 +26,12 @@ class parking():
     @lista_minusvalidos.setter
     def lista_minusvalidos(self, value):
         self.__lista_minusvalidos=value
+
+    def __str__(self):
+        for i in self.lista_turismos:
+            print(i)
+        for i in self.lista_motocicletas:
+            print(i)
+        for i in self.lista_minusvalidos:
+            print(i)
+        return ""

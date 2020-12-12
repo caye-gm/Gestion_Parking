@@ -5,7 +5,7 @@ class plaza():
         self.__ocupada=ocupada
         self.__reservado=reservado
     def __str__(self):
-        return f"numero de plaza: {self.num_plaza}, vehiculo : {self.vehiculo}, ocupada: {self.ocupada}, resservada:{self.reservado}"
+        return f"número de plaza: {self.num_plaza}, vehiculo :  {self.vehiculo} , ocupada: {self.ocupada}, reservada:{self.reservado}"
     @property
     def num_plaza(self):
         return self.__num_plaza

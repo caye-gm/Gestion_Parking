@@ -1,4 +1,4 @@
-class Vehiculo():
+class vehiculo():
     def __init__(self,matricula,tipo,plaza,pin,fecha_entrada,fecha_salida):
         self.__matricula=matricula
         self.__tipo=tipo
@@ -8,12 +8,11 @@ class Vehiculo():
         self.__fecha_salida=fecha_salida
 
     def __str__(self):
-        return f"Matricula: {self.matricula},tipo : {self.tipo}, plaza: {self.plaza} ,pin:{self.pin}, " \
-               f"fecha entrada:{self.fecha_entrada}, fecha salida:{self.fecha_salida}"
+        return f"Matricula: {self.__matricula},tipo : {self.__tipo} ,pin:{self.__pin}, " \
+               f"fecha entrada:{self.__fecha_entrada}, fecha salida :{self.__fecha_salida}"
     @property
     def matricula(self):
         return self.__matricula
-
     @matricula.setter
     def matricula(self, value):
         self.__matricula=value
