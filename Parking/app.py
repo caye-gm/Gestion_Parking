@@ -9,7 +9,7 @@ lista_turismos=[]
 lista_minusvalidos=[]
 lista_clientes=[]
 lista_vehiculos=[]
-
+lista_recaudacion_cliente=[]
 cliente_repository=cliente_repository(lista_clientes)
 vehiculo_repository=vehiculo_repository(lista_vehiculos)
 parking=parking(lista_turismos,lista_motocicletas,lista_minusvalidos)
@@ -22,6 +22,9 @@ parking_service.depositar_motocicleta("1235F")
 parking_service.depositar_motocicleta("7235K")
 parking_service.depositar_minusvalido("6735J")
 
+print(parking)
+
+print(parking_service.retirar_vehiculo("2134F",0,int(input()),lista_recaudacion_cliente))
 print(parking)
 
 

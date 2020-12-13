@@ -1,7 +1,10 @@
 from Models.plaza import *
 from Models.vehiculo import *
+from Models.ticket import *
 from datetime import datetime
+
 import random
+
 class parking_service():
     def __init__(self,parking,cliente_repositorio,vehiculo_repositorio):
         self.__parking=parking
@@ -122,9 +125,52 @@ class parking_service():
             self.parking.lista_minusvalidos[valor].vehiculo=v
             self.parking.lista_minusvalidos[valor].ocupada=True
             self.vehiculo_repositorio.add_vehiculo(v)
+
+            #ticket_vehiculo=ticket(v.fecha_entrada,None,v.matricula,v.plaza.num_plaza,v.pin,None)
+
             return True
 
         return False
-    #def retirar_vehiculo(self,matrícula,numplaza,pin):
 
 
+    def tiempo_minutos(self,fecha1,fecha2):
+        tiempo = (fecha1 - fecha2)
+        total_seconds = tiempo.total_seconds()
+        minutes = total_seconds/60
+        return minutes
+
+
+
+    def retirar_vehiculo(self,matrícula,numplaza,pin,listaRetirada):
+        vehiculo=self.vehiculo_repositorio.find_by_matricula(matrícula)
+        if vehiculo !=None and vehiculo.plaza.num_plaza==numplaza and vehiculo.pin==pin:
+            if vehiculo.tipo=="turismo":
+                precio=0.12
+                vehiculo.fecha_salida=datetime.now()
+                total=self.tiempo_minutos(vehiculo.fecha_salida,vehiculo.fecha_entrada)*precio
+                vehiculo.plaza.ocupada=False
+                vehiculo.plaza.vehiculo=None
+                vehiculo.plaza=None
+                self.vehiculo_repositorio.lista_vehiculos.remove(vehiculo)
+                listaRetirada.append(total)
+                return total
+            if vehiculo.tipo=="motocicleta":
+                precio=0.08
+                vehiculo.fecha_salida=datetime.now()
+                total=self.tiempo_minutos(vehiculo.fecha_salida,vehiculo.fecha_entrada)*precio
+                vehiculo.plaza.ocupada=False
+                vehiculo.plaza.vehiculo=None
+                vehiculo.plaza=None
+                self.vehiculo_repositorio.remove(vehiculo)
+                listaRetirada.append(total)
+                return total
+            if vehiculo.tipo=="minusvalido":
+                precio=0.10
+                vehiculo.fecha_salida=datetime.now()
+                total=self.tiempo_minutos(vehiculo.fecha_salida,vehiculo.fecha_entrada)*precio
+                vehiculo.plaza.ocupada=False
+                vehiculo.plaza.vehiculo=None
+                vehiculo.plaza=None
+                self.vehiculo_repositorio.remove(vehiculo)
+                listaRetirada.append(total)
+                return total

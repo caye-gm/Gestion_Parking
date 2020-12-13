@@ -1,9 +1,10 @@
-class Ticket():
-    def __init__(self,fecha_entrada,fecha_salida,matricula,plaza,coste):
+class ticket():
+    def __init__(self,fecha_entrada,fecha_salida,matricula,plaza,pin,coste):
         self.__fecha_entrada=fecha_entrada
         self.__fecha_salida=fecha_salida
         self.__matricula=matricula
         self.__plaza=plaza
+        self.__pin=pin
         self.__coste=coste
 
     @property
@@ -34,6 +35,14 @@ class Ticket():
     @plaza.setter
     def plaza(self, value):
         self.__plaza =value
+
+    @property
+    def pin(self):
+        return self.__pin
+
+    @pin.setter
+    def pin(self, value):
+        self.__pin=value
     @property
     def coste(self):
         return self.__coste
