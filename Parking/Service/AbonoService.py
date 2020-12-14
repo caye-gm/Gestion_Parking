@@ -86,18 +86,21 @@ class abono_service():
                 plaza=self.parking_service.parking.lista_turismos[self.parking_service.plaza_turismo_disponible()]
                 plaza.reservado=True
                 plaza.vehiculo=vehiculo
+                vehiculo.plaza=plaza
 
+                self.vehiculo_repositorio.add_vehiculo(vehiculo)
                 c1=cliente(vehiculo,dni,nombre,None)
                 cliente_abono=abono(c1,tarjeta,"mensual",datetime.now(),self.sumar_fechas_meses("mensual"))
                 c1.abono=cliente_abono
                 self.cliente_repositorio.add_cliente(c1)
 
-            if vehiculo.tipo=="motocicletas" and self.parking_service.plaza_motocicleta_disponible()!=-1:
+            if vehiculo.tipo=="motocicleta" and self.parking_service.plaza_motocicleta_disponible()!=-1:
                 vehiculo.pin=random.randrange(1000,9999)
                 plaza=self.parking_service.parking.lista_motocicletas[self.parking_service.plaza_motocicleta_disponible()]
                 plaza.reservado=True
+                vehiculo.plaza=plaza
                 plaza.vehiculo=vehiculo
-
+                self.vehiculo_repositorio.add_vehiculo(vehiculo)
                 c1=cliente(vehiculo,dni,nombre,None)
                 cliente_abono=abono(c1,tarjeta,"mensual",datetime.now(),self.sumar_fechas_meses("mensual"))
                 c1.abono=cliente_abono
@@ -107,12 +110,15 @@ class abono_service():
                 vehiculo.pin=random.randrange(1000,9999)
                 plaza=self.parking_service.parking.lista_minusvalidos[self.parking_service.plaza_minusvalido_disponible]
                 plaza.reservado=True
+                vehiculo.plaza=plaza
                 plaza.vehiculo=vehiculo
-
+                self.vehiculo_repositorio.add_vehiculo(vehiculo)
                 c1=cliente(vehiculo,dni,nombre,None)
                 cliente_abono=abono(c1,tarjeta,"mensual",datetime.now(),self.sumar_fechas_meses("mensual"))
                 c1.abono=cliente_abono
                 self.cliente_repositorio.add_cliente(c1)
-
-            fact=factura(cliente_abono,25)
-            self.factura_repository.add_factura(fact)
+            if cliente_abono!=None:
+                fact=factura(cliente_abono,25)
+                self.factura_repository.add_factura(fact)
+                return True
+            return False

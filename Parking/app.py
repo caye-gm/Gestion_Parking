@@ -35,7 +35,10 @@ print(parking_service.retirar_vehiculo("2134F",0,int(input()),lista_recaudacion_
 
 
 abono_service.crear_usuario_abonado_mensual("caye","2313213","231312",vehiculo("1232F","turismo",None,None,None,None),"mensual")
+abono_service.crear_usuario_abonado_mensual("caye","2323213","2318312",vehiculo("1234F","turismo",None,None,None,None),"mensual")
 
 print(lista_factura[0])
+
+print(parking)
 
 
