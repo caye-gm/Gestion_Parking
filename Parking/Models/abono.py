@@ -6,6 +6,8 @@ class abono():
         self.__fecha_activacion=fecha_activacion
         self.__fecha_cancelacion=fecha_cancelacion
 
+    def __str__(self):
+        return f"{self.cliente} tipo de abono: {self.tipo} fecha inicio: {self.fecha_activacion} fecha fin: {self.fecha_cancelacion}"
     @property
     def cliente(self):
         return self.__cliente

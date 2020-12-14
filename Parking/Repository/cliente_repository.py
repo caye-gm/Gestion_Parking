@@ -11,6 +11,11 @@ class cliente_repository():
     def lista_clientes(self, value):
         self.__lista_clientes=value
 
+
+
+    def add_cliente(self,cliente):
+        self.lista_clientes.append(cliente)
+
     def findAll(self):
         for i in self.lista_clientes:
             print(f"El cliente tiene dni: {i.dni}")

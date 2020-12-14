@@ -153,7 +153,7 @@ class parking_service():
                 vehiculo.plaza=None
                 self.vehiculo_repositorio.lista_vehiculos.remove(vehiculo)
                 listaRetirada.append(total)
-                return total
+                return round(total,2)
             if vehiculo.tipo=="motocicleta":
                 precio=0.08
                 vehiculo.fecha_salida=datetime.now()
@@ -174,3 +174,18 @@ class parking_service():
                 self.vehiculo_repositorio.remove(vehiculo)
                 listaRetirada.append(total)
                 return total
+
+    def depositar_cliente_abonado(self,matrícula,dni):
+        vehiculo=self.vehiculo_repositorio.find_by_matricula(matrícula)
+        cliente=self.cliente_repositorio.findByDni(dni)
+        if cliente.vehiculo == vehiculo and vehiculo.plaza.ocupada==False and vehiculo.plaza.reservado==True:
+            vehiculo.plaza.ocupada=True
+            return True
+        return False
+
+    def retirar_vehiculo_cliente_abonado(self,matrícula,plaza,pin):
+        vehiculo=self.vehiculo_repositorio.find_by_matricula(matrícula)
+        if vehiculo.plaza.ocupada==True and vehiculo.plaza.reservado==True and vehiculo.plaza.num_plaza==plaza and vehiculo.pin==pin:
+            vehiculo.plaza.ocupada=False
+            return True
+        return False
