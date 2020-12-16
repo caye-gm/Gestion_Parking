@@ -12,3 +12,10 @@ class abono_repository():
 
     def add_abono(self,abono):
         self.lista_abonos.append=abono
+
+
+    def add_abono(self,abono):
+        self.lista_abonos.append(abono)
+
+    def delete_abono(self,abono):
+        self.lista_abonos.remove(abono)

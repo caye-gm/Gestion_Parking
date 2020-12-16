@@ -70,6 +70,11 @@ class parking_service():
             plazaMinus =plaza(i,None,False,False)
             self.parking.lista_minusvalidos.append(plazaMinus)
 
+    def plaza_vacia(self,plaza):
+        plaza.vehiculo=None
+        plaza.ocupada=False
+        plaza.reservado=False
+
     def plaza_turismo_disponible(self):
         count=0
         for i in self.parking.lista_turismos:

@@ -4,12 +4,12 @@ from Models.cliente import *
 from datetime import datetime
 import random
 class abono_service():
-    def __init__(self,cliente_repositorio,vehiculo_repositorio,factura_repository,parking_service):
+    def __init__(self,cliente_repositorio,vehiculo_repositorio,factura_repository,parking_service,abono_repository):
         self.__cliente_repositorio=cliente_repositorio
         self.__vehiculo_repositorio=vehiculo_repositorio
         self.__factura_repository=factura_repository
         self.__parking_service=parking_service
-
+        self.__abono_repository=abono_repository
     @property
     def cliente_repositorio(self):
         return self.__cliente_repositorio
@@ -39,8 +39,14 @@ class abono_service():
     @parking_service.setter
     def parking_service(self, value):
         self.__parking_service=value
+    @property
+    def abono_repository(self):
+        return self.__abono_repository
 
-
+    @abono_repository.setter
+    def abono_repository(self, value):
+        self.__abono_repository=value
+    #segun el tipo de abono calcula la fecha de ahora mas su tiempo
     def sumar_fechas_meses(self,tipo):
         fecha=datetime.now()
 
@@ -78,21 +84,31 @@ class abono_service():
 
         return fecha
 
-
+    #este metodo lo explico en turismos pero als 3 condiciones son iguales pero apra distintos tipos de vehiculos
     def crear_usuario_abonado_mensual(self,nombre,dni,tarjeta,vehiculo,tipo_bono):
         if tipo_bono == "mensual":
+            #comprobamos que es del tipo turismo y hay plaza disponible
             if vehiculo.tipo=="turismo" and self.parking_service.plaza_turismo_disponible()!=-1:
+                #generamos un pin para el vehiculo que sera siempre el mismo
                 vehiculo.pin=random.randrange(1000,9999)
+                #plaza que se le va a asignar al abonado
                 plaza=self.parking_service.parking.lista_turismos[self.parking_service.plaza_turismo_disponible()]
+                #aqui ponemos la plaza en reservada y le asignamos el coche del cliente
                 plaza.reservado=True
                 plaza.vehiculo=vehiculo
+                #al igual que al vehiculo le asignamos su plaza
                 vehiculo.plaza=plaza
-
-                self.vehiculo_repositorio.add_vehiculo(vehiculo)
+                #creamos al cliente
                 c1=cliente(vehiculo,dni,nombre,None)
+                #creamos el abono
                 cliente_abono=abono(c1,tarjeta,"mensual",datetime.now(),self.sumar_fechas_meses("mensual"))
+                #le asignamos el abono al cliente
                 c1.abono=cliente_abono
+
+                #guardamos en nuestros repositorios
+                self.vehiculo_repositorio.add_vehiculo(vehiculo)
                 self.cliente_repositorio.add_cliente(c1)
+                self.abono_repository.add_abono(cliente_abono)
 
             if vehiculo.tipo=="motocicleta" and self.parking_service.plaza_motocicleta_disponible()!=-1:
                 vehiculo.pin=random.randrange(1000,9999)
@@ -100,25 +116,233 @@ class abono_service():
                 plaza.reservado=True
                 vehiculo.plaza=plaza
                 plaza.vehiculo=vehiculo
-                self.vehiculo_repositorio.add_vehiculo(vehiculo)
                 c1=cliente(vehiculo,dni,nombre,None)
                 cliente_abono=abono(c1,tarjeta,"mensual",datetime.now(),self.sumar_fechas_meses("mensual"))
                 c1.abono=cliente_abono
+                self.vehiculo_repositorio.add_vehiculo(vehiculo)
                 self.cliente_repositorio.add_cliente(c1)
+                self.abono_repository.add_abono(cliente_abono)
 
             if vehiculo.tipo=="minusvalido" and self.parking_service.plaza_minusvalido_disponible()!=-1:
                 vehiculo.pin=random.randrange(1000,9999)
-                plaza=self.parking_service.parking.lista_minusvalidos[self.parking_service.plaza_minusvalido_disponible]
+                plaza=self.parking_service.parking.lista_minusvalidos[self.parking_service.plaza_minusvalido_disponible()]
                 plaza.reservado=True
                 vehiculo.plaza=plaza
                 plaza.vehiculo=vehiculo
-                self.vehiculo_repositorio.add_vehiculo(vehiculo)
+
                 c1=cliente(vehiculo,dni,nombre,None)
                 cliente_abono=abono(c1,tarjeta,"mensual",datetime.now(),self.sumar_fechas_meses("mensual"))
                 c1.abono=cliente_abono
+
+                self.vehiculo_repositorio.add_vehiculo(vehiculo)
                 self.cliente_repositorio.add_cliente(c1)
+                self.abono_repository.add_abono(cliente_abono)
+            #si cliente abono noe sta vacio esos ignifica e que en algun momento se ha creado en otro if
             if cliente_abono!=None:
+                #crea la factura
                 fact=factura(cliente_abono,25)
+                #la guarda
                 self.factura_repository.add_factura(fact)
                 return True
-            return False
+        return False
+
+
+
+    #este metodo lo explico en turismos pero als 3 condiciones son iguales pero apra distintos tipos de vehiculos
+    def crear_usuario_abonado_trimestral(self,nombre,dni,tarjeta,vehiculo,tipo_bono):
+        if tipo_bono == "trimestral":
+            #comprobamos que es del tipo turismo y hay plaza disponible
+            if vehiculo.tipo=="turismo" and self.parking_service.plaza_turismo_disponible()!=-1:
+                #generamos un pin para el vehiculo que sera siempre el mismo
+                vehiculo.pin=random.randrange(1000,9999)
+                #plaza que se le va a asignar al abonado
+                plaza=self.parking_service.parking.lista_turismos[self.parking_service.plaza_turismo_disponible()]
+                #aqui ponemos la plaza en reservada y le asignamos el coche del cliente
+                plaza.reservado=True
+                plaza.vehiculo=vehiculo
+                #al igual que al vehiculo le asignamos su plaza
+                vehiculo.plaza=plaza
+                #creamos al cliente
+                c1=cliente(vehiculo,dni,nombre,None)
+                #creamos el abono
+                cliente_abono=abono(c1,tarjeta,"trimestral",datetime.now(),self.sumar_fechas_meses("trimestral"))
+                #le asignamos el abono al cliente
+                c1.abono=cliente_abono
+
+                #guardamos en nuestros repositorios
+                self.vehiculo_repositorio.add_vehiculo(vehiculo)
+                self.cliente_repositorio.add_cliente(c1)
+                self.abono_repository.add_abono(cliente_abono)
+
+            if vehiculo.tipo=="motocicleta" and self.parking_service.plaza_motocicleta_disponible()!=-1:
+                vehiculo.pin=random.randrange(1000,9999)
+                plaza=self.parking_service.parking.lista_motocicletas[self.parking_service.plaza_motocicleta_disponible()]
+                plaza.reservado=True
+                vehiculo.plaza=plaza
+                plaza.vehiculo=vehiculo
+                c1=cliente(vehiculo,dni,nombre,None)
+                cliente_abono=abono(c1,tarjeta,"trimestral",datetime.now(),self.sumar_fechas_meses("trimestral"))
+                c1.abono=cliente_abono
+                self.vehiculo_repositorio.add_vehiculo(vehiculo)
+                self.cliente_repositorio.add_cliente(c1)
+                self.abono_repository.add_abono(cliente_abono)
+
+            if vehiculo.tipo=="minusvalido" and self.parking_service.plaza_minusvalido_disponible()!=-1:
+                vehiculo.pin=random.randrange(1000,9999)
+                plaza=self.parking_service.parking.lista_minusvalidos[self.parking_service.plaza_minusvalido_disponible()]
+                plaza.reservado=True
+                vehiculo.plaza=plaza
+                plaza.vehiculo=vehiculo
+
+                c1=cliente(vehiculo,dni,nombre,None)
+                cliente_abono=abono(c1,tarjeta,"trimestral",datetime.now(),self.sumar_fechas_meses("trimestral"))
+                c1.abono=cliente_abono
+
+                self.vehiculo_repositorio.add_vehiculo(vehiculo)
+                self.cliente_repositorio.add_cliente(c1)
+                self.abono_repository.add_abono(cliente_abono)
+            #si cliente abono noe sta vacio esos ignifica e que en algun momento se ha creado en otro if
+            if cliente_abono!=None:
+                #crea la factura
+                fact=factura(cliente_abono,70)
+                #la guarda
+                self.factura_repository.add_factura(fact)
+                return True
+        return False
+
+
+    #este metodo lo explico en turismos pero als 3 condiciones son iguales pero apra distintos tipos de vehiculos
+    def crear_usuario_abonado_semestral(self,nombre,dni,tarjeta,vehiculo,tipo_bono):
+        if tipo_bono == "semestral":
+            #comprobamos que es del tipo turismo y hay plaza disponible
+            if vehiculo.tipo=="turismo" and self.parking_service.plaza_turismo_disponible()!=-1:
+                #generamos un pin para el vehiculo que sera siempre el mismo
+                vehiculo.pin=random.randrange(1000,9999)
+                #plaza que se le va a asignar al abonado
+                plaza=self.parking_service.parking.lista_turismos[self.parking_service.plaza_turismo_disponible()]
+                #aqui ponemos la plaza en reservada y le asignamos el coche del cliente
+                plaza.reservado=True
+                plaza.vehiculo=vehiculo
+                #al igual que al vehiculo le asignamos su plaza
+                vehiculo.plaza=plaza
+                #creamos al cliente
+                c1=cliente(vehiculo,dni,nombre,None)
+                #creamos el abono
+                cliente_abono=abono(c1,tarjeta,"semestral",datetime.now(),self.sumar_fechas_meses("semestral"))
+                #le asignamos el abono al cliente
+                c1.abono=cliente_abono
+
+                #guardamos en nuestros repositorios
+                self.vehiculo_repositorio.add_vehiculo(vehiculo)
+                self.cliente_repositorio.add_cliente(c1)
+                self.abono_repository.add_abono(cliente_abono)
+
+            if vehiculo.tipo=="motocicleta" and self.parking_service.plaza_motocicleta_disponible()!=-1:
+                vehiculo.pin=random.randrange(1000,9999)
+                plaza=self.parking_service.parking.lista_motocicletas[self.parking_service.plaza_motocicleta_disponible()]
+                plaza.reservado=True
+                vehiculo.plaza=plaza
+                plaza.vehiculo=vehiculo
+                c1=cliente(vehiculo,dni,nombre,None)
+                cliente_abono=abono(c1,tarjeta,"semestral",datetime.now(),self.sumar_fechas_meses("semestral"))
+                c1.abono=cliente_abono
+                self.vehiculo_repositorio.add_vehiculo(vehiculo)
+                self.cliente_repositorio.add_cliente(c1)
+                self.abono_repository.add_abono(cliente_abono)
+
+            if vehiculo.tipo=="minusvalido" and self.parking_service.plaza_minusvalido_disponible()!=-1:
+                vehiculo.pin=random.randrange(1000,9999)
+                plaza=self.parking_service.parking.lista_minusvalidos[self.parking_service.plaza_minusvalido_disponible()]
+                plaza.reservado=True
+                vehiculo.plaza=plaza
+                plaza.vehiculo=vehiculo
+
+                c1=cliente(vehiculo,dni,nombre,None)
+                cliente_abono=abono(c1,tarjeta,"semestral",datetime.now(),self.sumar_fechas_meses("semestral"))
+                c1.abono=cliente_abono
+
+                self.vehiculo_repositorio.add_vehiculo(vehiculo)
+                self.cliente_repositorio.add_cliente(c1)
+                self.abono_repository.add_abono(cliente_abono)
+            #si cliente abono noe sta vacio esos ignifica e que en algun momento se ha creado en otro if
+            if cliente_abono!=None:
+                #crea la factura
+                fact=factura(cliente_abono,130)
+                #la guarda
+                self.factura_repository.add_factura(fact)
+                return True
+        return False
+
+
+
+    #este metodo lo explico en turismos pero als 3 condiciones son iguales pero apra distintos tipos de vehiculos
+    def crear_usuario_abonado_anual(self,nombre,dni,tarjeta,vehiculo,tipo_bono):
+        if tipo_bono == "anual":
+            #comprobamos que es del tipo turismo y hay plaza disponible
+            if vehiculo.tipo=="turismo" and self.parking_service.plaza_turismo_disponible()!=-1:
+                #generamos un pin para el vehiculo que sera siempre el mismo
+                vehiculo.pin=random.randrange(1000,9999)
+                #plaza que se le va a asignar al abonado
+                plaza=self.parking_service.parking.lista_turismos[self.parking_service.plaza_turismo_disponible()]
+                #aqui ponemos la plaza en reservada y le asignamos el coche del cliente
+                plaza.reservado=True
+                plaza.vehiculo=vehiculo
+                #al igual que al vehiculo le asignamos su plaza
+                vehiculo.plaza=plaza
+                #creamos al cliente
+                c1=cliente(vehiculo,dni,nombre,None)
+                #creamos el abono
+                cliente_abono=abono(c1,tarjeta,"anual",datetime.now(),self.sumar_fechas_meses("anual"))
+                #le asignamos el abono al cliente
+                c1.abono=cliente_abono
+
+                #guardamos en nuestros repositorios
+                self.vehiculo_repositorio.add_vehiculo(vehiculo)
+                self.cliente_repositorio.add_cliente(c1)
+                self.abono_repository.add_abono(cliente_abono)
+
+            if vehiculo.tipo=="motocicleta" and self.parking_service.plaza_motocicleta_disponible()!=-1:
+                vehiculo.pin=random.randrange(1000,9999)
+                plaza=self.parking_service.parking.lista_motocicletas[self.parking_service.plaza_motocicleta_disponible()]
+                plaza.reservado=True
+                vehiculo.plaza=plaza
+                plaza.vehiculo=vehiculo
+                c1=cliente(vehiculo,dni,nombre,None)
+                cliente_abono=abono(c1,tarjeta,"anual",datetime.now(),self.sumar_fechas_meses("anual"))
+                c1.abono=cliente_abono
+                self.vehiculo_repositorio.add_vehiculo(vehiculo)
+                self.cliente_repositorio.add_cliente(c1)
+                self.abono_repository.add_abono(cliente_abono)
+
+            if vehiculo.tipo=="minusvalido" and self.parking_service.plaza_minusvalido_disponible()!=-1:
+                vehiculo.pin=random.randrange(1000,9999)
+                plaza=self.parking_service.parking.lista_minusvalidos[self.parking_service.plaza_minusvalido_disponible()]
+                plaza.reservado=True
+                vehiculo.plaza=plaza
+                plaza.vehiculo=vehiculo
+
+                c1=cliente(vehiculo,dni,nombre,None)
+                cliente_abono=abono(c1,tarjeta,"anual",datetime.now(),self.sumar_fechas_meses("anual"))
+                c1.abono=cliente_abono
+
+                self.vehiculo_repositorio.add_vehiculo(vehiculo)
+                self.cliente_repositorio.add_cliente(c1)
+                self.abono_repository.add_abono(cliente_abono)
+            #si cliente abono noe sta vacio esos ignifica e que en algun momento se ha creado en otro if
+            if cliente_abono!=None:
+                #crea la factura
+                fact=factura(cliente_abono,130)
+                #la guarda
+                self.factura_repository.add_factura(fact)
+                return True
+        return False
+
+    def dar_baja(self,dni):
+        cliente=self.cliente_repositorio.findByDni(dni)
+        if cliente!=None:
+            self.parking_service.plaza_vacia(cliente.vehiculo.plaza)
+            self.abono_repository.delete_abono(cliente.abono)
+            self.vehiculo_repositorio.delete_vehiculo(cliente.vehiculo)
+            self.cliente_repositorio.removeByDni(cliente.dni)
+            return True
+        return False

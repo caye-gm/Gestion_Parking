@@ -24,4 +24,5 @@ class vehiculo_repository():
             if i.matricula==matricula:
                 return i
         return False
-
+    def delete_vehiculo(self,vehiculo):
+        self.lista_vehiculos.remove(vehiculo)
