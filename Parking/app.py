@@ -35,20 +35,45 @@ parking_service.depositar_minusvalido("6735J")
 print(parking)
 print(lista_vehiculos)
 print(parking_service.retirar_vehiculo("2134F",0,int(input()),lista_recaudacion_cliente))
-
-
 abono_service.crear_usuario_abonado_mensual("caye","2313213","231312",vehiculo("1232F","turismo",None,None,None,None),"mensual")
 abono_service.crear_usuario_abonado_trimestral("caye","2323213","2318313",vehiculo("1234F","motocicleta",None,None,None,None),"trimestral")
 abono_service.crear_usuario_abonado_semestral("caye","2323222","2318313",vehiculo("1234F","minusvalido",None,None,None,None),"semestral")
-
-
 print(parking)
-
 print(lista_factura[0])
 print(lista_factura[1])
 print(lista_vehiculos[6])
-
 abono_service.dar_baja("2323222")
 print(parking)
 print(lista_factura[2])
+
+print("Bienvenido a CayeParking \nPulse 1 para depositar un vehiculo\nPulse 2 para retirar un vehiculo\Pulse 3 para "
+      "abonarse\nPulse 4 en acceder como administrador\nPulse 5 para salir")
+
+
+op=int(input())
+if op==1:
+    print("Pulse 1 para depositar como cliente sin abono\nPulse 2 para depositar como cliente abonado\nPulse 3 para depositar abonado\nPulse 0 para salir")
+    op=int(input())
+    if op == 1:
+        print("Pulse 1 para depositar turismo\nPulse 2 para depositar vehiculo\nPulse 3 para depositar en plazas minusvalido")
+        op = int(input())
+        if op ==1:
+            print("Introduce la matricula")
+            parking_service.depositar_turismo(input())
+        if op==2:
+            print("Introduce la matricula")
+            parking_service.depositar_motocicleta(input())
+        if op==3:
+            print("Introduce la matricula")
+            parking_service.depositar_minusvalido(input())
+    if op == 2:
+            print("Introduce la matricula")
+            matricula=input()
+            print("Introduce el numero de plaza")
+            numero_plaza = input()
+            print("Introduce el pin")
+            pin = input()
+
+            parking_service.retirar_vehiculo(matricula,numero_plaza,pin,lista_recaudacion_cliente)
+
 
