@@ -348,6 +348,7 @@ class abono_service():
             return True
         return False
 
+
     def obtener_abonos_mes(self,mes):
         abonos=self.abono_repository
         for i in abonos:
@@ -361,3 +362,50 @@ class abono_service():
         for i in abonos:
             if i.fecha_cancelacion < date and i.fecha_cancelacion > datetime.now():
                 print(i)
+
+    def renovar_mensual(self,tipo,cliente):
+        if cliente != None and tipo=="mensual":
+            cliente_abono = cliente.abono
+            cliente_abono.tipo = tipo
+            cliente_abono.fecha_activacion = datetime.now()
+            cliente_abono.fecha_cancelacion = self.sumar_fechas_meses(tipo)
+            return True
+        return False
+
+    def renovar_trimestral(self,tipo,cliente):
+        if tipo=="trimestral":
+            cliente_abono = cliente.abono
+            cliente_abono.tipo = tipo
+            cliente_abono.fecha_activacion = datetime.now()
+            cliente_abono.fecha_cancelacion = self.sumar_fechas_meses(tipo)
+            return True
+        return False
+
+    def renovar_semestral(self,tipo,cliente):
+        if tipo=="semestral":
+            cliente_abono = cliente.abono
+            cliente_abono.tipo = tipo
+            cliente_abono.fecha_activacion = datetime.now()
+            cliente_abono.fecha_cancelacion = self.sumar_fechas_meses(tipo)
+            return True
+        return False
+
+    def renovar_anual(self,tipo,cliente):
+        if tipo=="anual":
+            cliente_abono = cliente.abono
+            cliente_abono.tipo = tipo
+            cliente_abono.fecha_activacion = datetime.now()
+            cliente_abono.fecha_cancelacion = self.sumar_fechas_meses(tipo)
+            return True
+        return False
+
+
+    def modificar_tiempo_abono(self,dni,tipo):
+        cliente = self.cliente_repositorio.findByDni(dni)
+        if cliente != None:
+            self.renovar_mensual(tipo,cliente)
+            self.renovar_trimestral(tipo,cliente)
+            self.renovar_semestral(tipo,cliente)
+            self.renovar_anual(tipo, cliente)
+            return True
+        return False
