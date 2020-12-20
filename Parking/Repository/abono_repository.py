@@ -1,5 +1,6 @@
+import pickle
 class abono_repository():
-    def __init__(self,lista_abonos):
+    def __init__(self,lista_abonos=[]):
         self.__lista_abonos=lista_abonos
 
     @property
@@ -16,6 +17,12 @@ class abono_repository():
 
     def add_abono(self,abono):
         self.lista_abonos.append(abono)
+        pickle_url=open("./db/abonos","wb")
+        pickle.dump(self.lista_abonos,pickle_url)
+        pickle_url.close()
 
     def delete_abono(self,abono):
         self.lista_abonos.remove(abono)
+        pickle_url=open("./db/abonos","wb")
+        pickle.dump(self.lista_abonos,pickle_url)
+        pickle_url.close()

@@ -1,7 +1,7 @@
 from Models.factura import *
 from  Models.abono import *
 from Models.cliente import *
-from datetime import datetime
+from datetime import datetime, timedelta
 import random
 class abono_service():
     def __init__(self,cliente_repositorio,vehiculo_repositorio,factura_repository,parking_service,abono_repository):
@@ -339,6 +339,7 @@ class abono_service():
 
     def dar_baja(self,dni):
         cliente=self.cliente_repositorio.findByDni(dni)
+
         if cliente!=None:
             self.parking_service.plaza_vacia(cliente.vehiculo.plaza)
             self.abono_repository.delete_abono(cliente.abono)
@@ -346,3 +347,17 @@ class abono_service():
             self.cliente_repositorio.removeByDni(cliente.dni)
             return True
         return False
+
+    def obtener_abonos_mes(self,mes):
+        abonos=self.abono_repository
+        for i in abonos:
+            if i.fecha_cancelacion.month == mes:
+                print(i)
+
+    def obtener_caducidad_diez_dias(self):
+        abonos=self.abono_repository
+        date=datetime.now()
+        date += timedelta(days=10)
+        for i in abonos:
+            if i.fecha_cancelacion < date and i.fecha_cancelacion > datetime.now():
+                print(i)

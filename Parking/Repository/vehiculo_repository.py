@@ -1,6 +1,7 @@
 from Models.vehiculo import *
+import pickle
 class vehiculo_repository():
-    def __init__(self,lista_vehiculos):
+    def __init__(self,lista_vehiculos=[]):
         self.__lista_vehiculos=lista_vehiculos
 
     @property
@@ -14,6 +15,10 @@ class vehiculo_repository():
 
     def add_vehiculo(self,vehiculo):
         self.lista_vehiculos.append(vehiculo)
+        pickle_url=open("./db/vehiculos","wb")
+        pickle.dump(self.lista_vehiculos,pickle_url)
+        pickle_url.close()
+
 
     def findAll(self):
         for i in self.lista_vehiculos:
@@ -24,5 +29,9 @@ class vehiculo_repository():
             if i.matricula==matricula:
                 return i
         return False
+
     def delete_vehiculo(self,vehiculo):
         self.lista_vehiculos.remove(vehiculo)
+        pickle_url=open("./db/vehiculos","wb")
+        pickle.dump(self.lista_vehiculos,pickle_url)
+        pickle_url.close()
