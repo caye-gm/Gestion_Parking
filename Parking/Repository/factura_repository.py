@@ -21,3 +21,9 @@ class factura_repository():
     def factura_findAll(self):
         for i in self.lista_factura:
             print(i)
+
+    def calcular_total(self):
+        total=0
+        for i in self.lista_factura:
+            total+=i.total_pago
+        return total

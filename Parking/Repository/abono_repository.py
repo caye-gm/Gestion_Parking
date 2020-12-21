@@ -14,6 +14,9 @@ class abono_repository():
     def add_abono(self,abono):
         self.lista_abonos.append=abono
 
+    def find_all(self):
+        for i in self.lista_abonos:
+            print(i)
 
     def add_abono(self,abono):
         self.lista_abonos.append(abono)

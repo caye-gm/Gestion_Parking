@@ -346,12 +346,13 @@ class abono_service():
             self.abono_repository.delete_abono(cliente.abono)
             self.vehiculo_repositorio.delete_vehiculo(cliente.vehiculo)
             self.cliente_repositorio.removeByDni(cliente.dni)
+            print("Realizado con exito :D")
             return True
-        return False
+        return print("Error")
 
 
     def obtener_abonos_mes(self,mes):
-        abonos=self.abono_repository
+        abonos=self.abono_repository.lista_abonos
         for i in abonos:
             if i.fecha_cancelacion.month == mes:
                 print(i)
@@ -370,6 +371,9 @@ class abono_service():
             cliente_abono.tipo = tipo
             cliente_abono.fecha_activacion = datetime.now()
             cliente_abono.fecha_cancelacion = self.sumar_fechas_meses(tipo)
+
+            fact = factura(cliente_abono, 25)
+            self.factura_repository.add_factura(fact)
             return True
         return False
 
@@ -379,6 +383,9 @@ class abono_service():
             cliente_abono.tipo = tipo
             cliente_abono.fecha_activacion = datetime.now()
             cliente_abono.fecha_cancelacion = self.sumar_fechas_meses(tipo)
+
+            fact = factura(cliente_abono, 70)
+            self.factura_repository.add_factura(fact)
             return True
         return False
 
@@ -388,6 +395,9 @@ class abono_service():
             cliente_abono.tipo = tipo
             cliente_abono.fecha_activacion = datetime.now()
             cliente_abono.fecha_cancelacion = self.sumar_fechas_meses(tipo)
+
+            fact = factura(cliente_abono, 130)
+            self.factura_repository.add_factura(fact)
             return True
         return False
 
@@ -397,6 +407,8 @@ class abono_service():
             cliente_abono.tipo = tipo
             cliente_abono.fecha_activacion = datetime.now()
             cliente_abono.fecha_cancelacion = self.sumar_fechas_meses(tipo)
+            fact = factura(cliente_abono, 200)
+            self.factura_repository.add_factura(fact)
             return True
         return False
 
@@ -408,5 +420,6 @@ class abono_service():
             self.renovar_trimestral(tipo,cliente)
             self.renovar_semestral(tipo,cliente)
             self.renovar_anual(tipo, cliente)
+            print("Realizado con exito")
             return True
-        return False
+        return print("Ha habido un error , el cliente no se encuentra")

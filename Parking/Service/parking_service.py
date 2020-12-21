@@ -91,6 +91,7 @@ class parking_service():
             self.parking.lista_turismos[valor].vehiculo=v
             self.parking.lista_turismos[valor].ocupada=True
             self.vehiculo_repositorio.add_vehiculo(v)
+
             return True
 
         return False
@@ -189,9 +190,10 @@ class parking_service():
                 return True
         return "Hemos tenido un error , comprueba que tus datos sean correctos"
 
-    def retirar_vehiculo_cliente_abonado(self,matrícula,plaza,pin):
-        vehiculo=self.vehiculo_repositorio.find_by_matricula(matrícula)
-        if vehiculo.plaza.ocupada==True and vehiculo.plaza.reservado==True and vehiculo.plaza.num_plaza==plaza and vehiculo.pin==pin:
-            vehiculo.plaza.ocupada=False
-            return True
+    def retirar_vehiculo_cliente_abonado(self,matricula,numPlaza,pin):
+        vehiculo=self.vehiculo_repositorio.find_by_matricula(matricula)
+        if vehiculo!=None:
+            if vehiculo.plaza.ocupada==True and vehiculo.plaza.reservado==True and vehiculo.plaza.num_plaza==numPlaza and vehiculo.pin==pin:
+                vehiculo.plaza.ocupada=False
+                return True
         return False

@@ -45,3 +45,5 @@ class abono():
     @fecha_cancelacion.setter
     def fecha_cancelacion(self, value):
         self.__fecha_cancelacion=value
+
+
