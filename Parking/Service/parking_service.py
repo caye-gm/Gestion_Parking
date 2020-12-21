@@ -156,7 +156,7 @@ class parking_service():
                 vehiculo.plaza.ocupada=False
                 vehiculo.plaza.vehiculo=None
                 vehiculo.plaza=None
-                self.vehiculo_repositorio.lista_vehiculos.remove(vehiculo)
+                self.vehiculo_repositorio.lista_vehiculos.delete_vehiculo(vehiculo)
                 listaRetirada.append(total)
                 return round(total,2)
             if vehiculo.tipo=="motocicleta":
@@ -166,7 +166,7 @@ class parking_service():
                 vehiculo.plaza.ocupada=False
                 vehiculo.plaza.vehiculo=None
                 vehiculo.plaza=None
-                self.vehiculo_repositorio.remove(vehiculo)
+                self.vehiculo_repositorio.delete_vehiculo(vehiculo)
                 listaRetirada.append(total)
                 return total
             if vehiculo.tipo=="minusvalido":
@@ -176,17 +176,18 @@ class parking_service():
                 vehiculo.plaza.ocupada=False
                 vehiculo.plaza.vehiculo=None
                 vehiculo.plaza=None
-                self.vehiculo_repositorio.remove(vehiculo)
+                self.vehiculo_repositorio.delete_vehiculo(vehiculo)
                 listaRetirada.append(total)
                 return total
 
     def depositar_cliente_abonado(self,matrícula,dni):
         vehiculo=self.vehiculo_repositorio.find_by_matricula(matrícula)
         cliente=self.cliente_repositorio.findByDni(dni)
-        if cliente.vehiculo == vehiculo and vehiculo.plaza.ocupada==False and vehiculo.plaza.reservado==True:
-            vehiculo.plaza.ocupada=True
-            return True
-        return False
+        if vehiculo != None and cliente != None:
+            if cliente.vehiculo == vehiculo and vehiculo.plaza.ocupada==False and vehiculo.plaza.reservado==True:
+                vehiculo.plaza.ocupada=True
+                return True
+        return "Hemos tenido un error , comprueba que tus datos sean correctos"
 
     def retirar_vehiculo_cliente_abonado(self,matrícula,plaza,pin):
         vehiculo=self.vehiculo_repositorio.find_by_matricula(matrícula)

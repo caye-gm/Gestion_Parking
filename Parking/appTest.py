@@ -76,24 +76,10 @@ parking_service.depositar_minusvalido("6735J")
 
 
 
-
-print(parking)
-print(vehiculo_repository.lista_vehiculos)
-print(parking_service.retirar_vehiculo("2134F",0,int(input()),lista_recaudacion_cliente))
-
-
 abono_service.crear_usuario_abonado_mensual("caye","2313213","231312",vehiculo("1232F","turismo",None,None,None,None),"mensual")
 abono_service.crear_usuario_abonado_trimestral("caye","2323213","2318313",vehiculo("1234F","motocicleta",None,None,None,None),"trimestral")
 abono_service.crear_usuario_abonado_semestral("caye","2323222","2318313",vehiculo("1234F","minusvalido",None,None,None,None),"semestral")
 
 
-print(parking)
-
-factura_repository.factura_findAll()
-
-
-
-abono_service.dar_baja("2323222")
-print(parking)
 
 

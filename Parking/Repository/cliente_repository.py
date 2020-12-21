@@ -27,7 +27,7 @@ class cliente_repository():
         for cliente in self.lista_clientes:
             if cliente.dni==dni:
                 return cliente
-        return False
+        return None
 
     def removeByDni(self,dni):
         cliente=self.findByDni(dni)

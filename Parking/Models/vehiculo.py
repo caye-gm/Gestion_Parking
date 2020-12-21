@@ -9,7 +9,7 @@ class vehiculo():
 
     def __str__(self):
         return f"Matricula: {self.__matricula},tipo : {self.__tipo} ,pin:{self.__pin}, " \
-               f"fecha entrada:{self.__fecha_entrada}, fecha salida :{self.__fecha_salida}"
+               f"fecha entrada:{self.__fecha_entrada}"
     @property
     def matricula(self):
         return self.__matricula

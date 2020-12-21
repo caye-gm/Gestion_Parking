@@ -144,7 +144,8 @@ class abono_service():
                 #la guarda
                 self.factura_repository.add_factura(fact)
                 return True
-        return False
+        return
+
 
 
 
