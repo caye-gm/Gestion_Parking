@@ -4,9 +4,9 @@ Proyecto sobre la gestión de un parking se realizara con javascript y node
 # Programa
 
 
-Funciones:
+## Funciones:
 
-Zona cliente:
+### Zona cliente:
 
 -Depositar vehículo
 
@@ -17,7 +17,7 @@ Zona cliente:
 -Retirar abonados
 
 
-Zona administador:
+### Zona administador:
 
 
 
