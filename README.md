@@ -1,5 +1,5 @@
 # Proyecto_Python_Parking
-Proyecto sobre la gestión de un parking 
+Proyecto sobre la gestión de un parking de vehiculos 
 
 # Programa
 Al inicio se pide el numero de plazas del parking y esta se calcularan en turismo el 70% de estas plazas , motocicletas el 15% y 15% de minusválido 
